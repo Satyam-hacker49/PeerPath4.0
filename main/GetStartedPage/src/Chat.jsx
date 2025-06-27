@@ -208,12 +208,11 @@ const Chat = ({ currentUser, onLogout }) => {
           <h1>PeerPath</h1>
         </div>
         <div className="nav-links">
-          <Link to="/dashboard">Dashboard</Link>
           <Link to="/doubts">Doubts</Link>
           <Link to="/collaboration">Collaboration</Link>
           <Link to="/resources">Resources</Link>
           <Link to="/chat" className="active">Chat</Link>
-          <Link to="/location">Location</Link>
+          <Link to="/location">Campus Connect</Link>
           <Link to="/profile">Profile</Link>
           <button onClick={onLogout} className="logout-btn">Logout</button>
         </div>

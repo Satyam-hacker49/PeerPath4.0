@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import ClickSpark from './ClickSpark.jsx';
+import AnimatedNavLink from './AnimatedNavLink.jsx';
 import './Profile.css';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { motion } from 'framer-motion';
@@ -211,14 +213,23 @@ const Profile = ({ onLogout }) => {
           <h1>PeerPath</h1>
         </div>
         <div className="nav-links">
-          <Link to="/dashboard">Dashboard</Link>
-          <Link to="/doubts">Doubts</Link>
-          <Link to="/collaboration">Collaboration</Link>
-          <Link to="/resources">Resources</Link>
-          <Link to="/chat">Chat</Link>
-          <Link to="/location">Location</Link>
-          <Link to="/profile" className="active">Profile</Link>
-          <button onClick={handleLogout} className="logout-btn">Logout</button>
+          <AnimatedNavLink to="/doubts" isActive={false}>Doubts</AnimatedNavLink>
+          <AnimatedNavLink to="/collaboration" isActive={false}>Collaboration</AnimatedNavLink>
+          <AnimatedNavLink to="/resources" isActive={false}>Resources</AnimatedNavLink>
+          <AnimatedNavLink to="/chat" isActive={false}>Chat</AnimatedNavLink>
+          <AnimatedNavLink to="/location" isActive={false}>Campus Connect</AnimatedNavLink>
+          <AnimatedNavLink to="/profile" isActive={true}>Profile</AnimatedNavLink>
+        </div>
+        <div className="logout-container">
+          <ClickSpark
+            sparkColor='#ff4444'
+            sparkSize={12}
+            sparkRadius={25}
+            sparkCount={8}
+            duration={300}
+          >
+            <button onClick={handleLogout} className="logout-btn">Logout</button>
+          </ClickSpark>
         </div>
       </nav>
 
@@ -386,9 +397,17 @@ const Profile = ({ onLogout }) => {
 
         {isEditing && (
           <div className="save-section">
-            <button onClick={handleSave} className="save-btn">
-              Save Changes
-            </button>
+            <ClickSpark
+              sparkColor='#00ff88'
+              sparkSize={15}
+              sparkRadius={35}
+              sparkCount={12}
+              duration={400}
+            >
+              <button onClick={handleSave} className="save-btn">
+                Save Changes
+              </button>
+            </ClickSpark>
           </div>
         )}
       </div>

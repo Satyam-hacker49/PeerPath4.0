@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import ClickSpark from './ClickSpark.jsx';
+import AnimatedNavLink from './AnimatedNavLink.jsx';
 import './Resources.css';
 
 const Resources = ({ currentUser, onLogout }) => {
@@ -195,7 +197,15 @@ const Resources = ({ currentUser, onLogout }) => {
               <p className="resource-type">{resource.type}</p>
               <p className="resource-description">{resource.description}</p>
               <div className="resource-action">
-                <button className="access-btn">Access</button>
+                <ClickSpark
+                  sparkColor='#00aaff'
+                  sparkSize={12}
+                  sparkRadius={30}
+                  sparkCount={10}
+                  duration={350}
+                >
+                  <button className="access-btn">Access</button>
+                </ClickSpark>
               </div>
             </div>
           ))}
@@ -234,7 +244,15 @@ const Resources = ({ currentUser, onLogout }) => {
                   <p className="resource-description">{society.description}</p>
                   <div className="resource-action">
                     <a href={society.link} target="_blank" rel="noopener noreferrer">
-                      <button className="access-btn">Visit Page</button>
+                      <ClickSpark
+                        sparkColor='#ffaa00'
+                        sparkSize={12}
+                        sparkRadius={30}
+                        sparkCount={10}
+                        duration={350}
+                      >
+                        <button className="access-btn">Visit Page</button>
+                      </ClickSpark>
                     </a>
                     <button className="recruitment-btn">Recruitment Coming Soon</button>
                   </div>
@@ -267,7 +285,15 @@ const Resources = ({ currentUser, onLogout }) => {
                   <p className="resource-description">{society.description}</p>
                   <div className="resource-action">
                     <a href={society.link} target="_blank" rel="noopener noreferrer">
-                      <button className="access-btn">Visit Page</button>
+                      <ClickSpark
+                        sparkColor='#ff00aa'
+                        sparkSize={12}
+                        sparkRadius={30}
+                        sparkCount={10}
+                        duration={350}
+                      >
+                        <button className="access-btn">Visit Page</button>
+                      </ClickSpark>
                     </a>
                     <button className="recruitment-btn">Recruitment Coming Soon</button>
                   </div>
@@ -299,7 +325,15 @@ const Resources = ({ currentUser, onLogout }) => {
                   <p className="resource-description">{society.description}</p>
                   <div className="resource-action">
                     <a href={society.link} target="_blank" rel="noopener noreferrer">
-                      <button className="access-btn">Visit Page</button>
+                      <ClickSpark
+                        sparkColor='#ffaa00'
+                        sparkSize={12}
+                        sparkRadius={30}
+                        sparkCount={10}
+                        duration={350}
+                      >
+                        <button className="access-btn">Visit Page</button>
+                      </ClickSpark>
                     </a>
                     <button className="recruitment-btn">Recruitment Coming Soon</button>
                   </div>
@@ -331,7 +365,15 @@ const Resources = ({ currentUser, onLogout }) => {
                   <p className="resource-description">{society.description}</p>
                   <div className="resource-action">
                     <a href={society.link} target="_blank" rel="noopener noreferrer">
-                      <button className="access-btn">Visit Page</button>
+                      <ClickSpark
+                        sparkColor='#00ffff'
+                        sparkSize={12}
+                        sparkRadius={30}
+                        sparkCount={10}
+                        duration={350}
+                      >
+                        <button className="access-btn">Visit Page</button>
+                      </ClickSpark>
                     </a>
                     <button className="recruitment-btn">Recruitment Coming Soon</button>
                   </div>
@@ -356,7 +398,15 @@ const Resources = ({ currentUser, onLogout }) => {
                   <button className="recruitment-btn">Coming Soon</button>
                 ) : (
                   <a href={resource.link} target="_blank" rel="noopener noreferrer">
-                    <button className="access-btn">Access Portal</button>
+                    <ClickSpark
+                      sparkColor='#00ff88'
+                      sparkSize={12}
+                      sparkRadius={30}
+                      sparkCount={10}
+                      duration={350}
+                    >
+                      <button className="access-btn">Access Portal</button>
+                    </ClickSpark>
                   </a>
                 )}
               </div>
@@ -376,14 +426,23 @@ const Resources = ({ currentUser, onLogout }) => {
           <h1>PeerPath</h1>
         </div>
         <div className="nav-links">
-          <Link to="/dashboard">Dashboard</Link>
-          <Link to="/doubts">Doubts</Link>
-          <Link to="/collaboration">Collaboration</Link>
-          <Link to="/resources" className="active">Resources</Link>
-          <Link to="/chat">Chat</Link>
-          <Link to="/location">Location</Link>
-          <Link to="/profile">Profile</Link>
-          <button onClick={onLogout} className="logout-btn">Logout</button>
+          <AnimatedNavLink to="/doubts" isActive={false}>Doubts</AnimatedNavLink>
+          <AnimatedNavLink to="/collaboration" isActive={false}>Collaboration</AnimatedNavLink>
+          <AnimatedNavLink to="/resources" isActive={true}>Resources</AnimatedNavLink>
+          <AnimatedNavLink to="/chat" isActive={false}>Chat</AnimatedNavLink>
+          <AnimatedNavLink to="/location" isActive={false}>Campus Connect</AnimatedNavLink>
+          <AnimatedNavLink to="/profile" isActive={false}>Profile</AnimatedNavLink>
+        </div>
+        <div className="logout-container">
+          <ClickSpark
+            sparkColor='#ff4444'
+            sparkSize={12}
+            sparkRadius={25}
+            sparkCount={8}
+            duration={300}
+          >
+            <button onClick={onLogout} className="logout-btn">Logout</button>
+          </ClickSpark>
         </div>
       </nav>
 

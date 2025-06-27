@@ -485,6 +485,27 @@
   font-size: 1rem;
 }
 
+.solution-tab-btn {
+  background: rgba(139, 92, 246, 0.12);
+  color: #a78bfa;
+  border: 1.5px solid #a78bfa;
+  border-radius: 8px 8px 0 0;
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-right: 4px;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+  outline: none;
+}
+
+.solution-tab-btn.active {
+  background: linear-gradient(90deg, #8b5cf6 0%, #7c3aed 100%);
+  color: #fff;
+  border-bottom: 2.5px solid #7c3aed;
+  z-index: 2;
+}
+
 @media (max-width: 768px) {
   .section {
     padding: 1rem;

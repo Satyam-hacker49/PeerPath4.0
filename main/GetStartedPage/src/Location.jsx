@@ -464,12 +464,11 @@ const Location = ({ currentUser, onLogout }) => {
           <h1>PeerPath</h1>
         </div>
         <div className="nav-links">
-          <Link to="/dashboard">Dashboard</Link>
           <Link to="/doubts">Doubts</Link>
           <Link to="/collaboration">Collaboration</Link>
           <Link to="/resources">Resources</Link>
           <Link to="/chat">Chat</Link>
-          <Link to="/location" className="active">Location</Link>
+          <Link to="/location" className="active">Campus Connect</Link>
           <Link to="/profile">Profile</Link>
           <button onClick={onLogout} className="logout-btn">Logout</button>
         </div>
@@ -621,7 +620,7 @@ const Location = ({ currentUser, onLogout }) => {
                 📹 Video Call
               </button>
               <button className="comm-btn message-btn" onClick={() => sendMessage(selectedRide.user._id)}>
-                💬 Message
+                Message
               </button>
               <button className="comm-btn location-btn" onClick={() => shareLocation(selectedRide)}>
                 📍 Share Location

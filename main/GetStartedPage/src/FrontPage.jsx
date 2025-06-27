@@ -1,5 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import ClickSpark from './ClickSpark.jsx';
+import AnimatedNavLink from './AnimatedNavLink.jsx';
 import './FrontPage.css';
 import { Link } from 'react-router-dom';
 
@@ -17,7 +20,7 @@ const FrontPage = ({ currentUser, onLogout }) => {
   const handleFeatureClick = (feature) => {
     switch (feature) {
       case 'mentorship':
-        navigate('/mentorship');
+        navigate('/doubts');
         break;
       case 'collaboration':
         navigate('/collaboration');
@@ -44,14 +47,33 @@ const FrontPage = ({ currentUser, onLogout }) => {
           <h1>PeerPath</h1>
         </div>
         <div className="nav-links">
-          <Link to="/dashboard">Dashboard</Link>
-          <Link to="/doubts">Doubts</Link>
-          <Link to="/collaboration">Collaboration</Link>
-          <Link to="/resources">Resources</Link>
-          <Link to="/chat">Chat</Link>
-          <Link to="/location">Location</Link>
-          <Link to="/profile">Profile</Link>
-          <button onClick={onLogout} className="logout-btn">Logout</button>
+          <AnimatedNavLink to="/doubts">Doubts</AnimatedNavLink>
+          <AnimatedNavLink to="/collaboration">Collaboration</AnimatedNavLink>
+          <AnimatedNavLink to="/resources">Resources</AnimatedNavLink>
+          <AnimatedNavLink to="/chat">Chat</AnimatedNavLink>
+          <AnimatedNavLink to="/location">Campus Connect</AnimatedNavLink>
+          <AnimatedNavLink to="/profile">Profile</AnimatedNavLink>
+          <ClickSpark
+            sparkColor='#ff4444'
+            sparkSize={12}
+            sparkRadius={25}
+            sparkCount={8}
+            duration={300}
+          >
+            <motion.button 
+              onClick={onLogout} 
+              className="logout-btn"
+              whileHover={{ 
+                scale: 1.05,
+                y: -2,
+                boxShadow: "0 8px 25px rgba(239, 68, 68, 0.4)",
+                transition: { duration: 0.2 }
+              }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Logout
+            </motion.button>
+          </ClickSpark>
         </div>
       </nav>
 
@@ -69,28 +91,68 @@ const FrontPage = ({ currentUser, onLogout }) => {
               Join a community of learners and mentors. Share knowledge, 
               solve problems, and build amazing projects together.
             </p>
-            <button className="get-started-btn" onClick={handleGetStarted}>
-              Get Started
-            </button>
+            <ClickSpark
+              sparkColor='#00ff88'
+              sparkSize={18}
+              sparkRadius={40}
+              sparkCount={14}
+              duration={450}
+            >
+              <button className="get-started-btn" onClick={handleGetStarted}>
+                Get Started
+              </button>
+            </ClickSpark>
           </div>
           <div className="hero-visual">
             <div className="floating-cards">
-              <div className="card card-1" onClick={() => handleFeatureClick('mentorship')}>
-                <span className="card-icon">🧑‍🏫</span>
-                <span className="card-text">Mentorship</span>
-              </div>
-              <div className="card card-2" onClick={() => handleFeatureClick('collaboration')}>
-                <span className="card-icon">🤝</span>
-                <span className="card-text">Collaboration</span>
-              </div>
-              <div className="card card-3" onClick={() => handleFeatureClick('resources')}>
-                <span className="card-icon">📚</span>
-                <span className="card-text">Resources</span>
-              </div>
-              <div className="card card-4" onClick={() => handleFeatureClick('location')}>
-                <span className="card-icon">💡</span>
-                <span className="card-text">Innovation</span>
-              </div>
+              <ClickSpark
+                sparkColor='#ffaa00'
+                sparkSize={12}
+                sparkRadius={30}
+                sparkCount={10}
+                duration={350}
+              >
+                <div className="card card-1" onClick={() => handleFeatureClick('mentorship')}>
+                  <span className="card-icon">🧑‍🏫</span>
+                  <span className="card-text">Mentorship</span>
+                </div>
+              </ClickSpark>
+              <ClickSpark
+                sparkColor='#00aaff'
+                sparkSize={12}
+                sparkRadius={30}
+                sparkCount={10}
+                duration={350}
+              >
+                <div className="card card-2" onClick={() => handleFeatureClick('collaboration')}>
+                  <span className="card-icon">🤝</span>
+                  <span className="card-text">Collaboration</span>
+                </div>
+              </ClickSpark>
+              <ClickSpark
+                sparkColor='#ff00aa'
+                sparkSize={12}
+                sparkRadius={30}
+                sparkCount={10}
+                duration={350}
+              >
+                <div className="card card-3" onClick={() => handleFeatureClick('resources')}>
+                  <span className="card-icon">📚</span>
+                  <span className="card-text">Resources</span>
+                </div>
+              </ClickSpark>
+              <ClickSpark
+                sparkColor='#00ffff'
+                sparkSize={12}
+                sparkRadius={30}
+                sparkCount={10}
+                duration={350}
+              >
+                <div className="card card-4" onClick={() => handleFeatureClick('location')}>
+                  <span className="card-icon">📍</span>
+                  <span className="card-text">Campus Connect</span>
+                </div>
+              </ClickSpark>
             </div>
           </div>
         </div>
@@ -98,26 +160,58 @@ const FrontPage = ({ currentUser, onLogout }) => {
         <div className="features-section">
           <h2>What You Can Do</h2>
           <div className="features-grid">
-            <div className="feature" onClick={() => handleFeatureClick('mentorship')}>
-              <div className="feature-icon">🎯</div>
-              <h3>Ask Questions</h3>
-              <p>Get help from peers and experts on any topic</p>
-            </div>
-            <div className="feature" onClick={() => handleFeatureClick('collaboration')}>
-              <div className="feature-icon">🚀</div>
-              <h3>Build Projects</h3>
-              <p>Collaborate on exciting projects with like-minded people</p>
-            </div>
-            <div className="feature" onClick={() => handleFeatureClick('resources')}>
-              <div className="feature-icon">📖</div>
-              <h3>Share Knowledge</h3>
-              <p>Contribute to the community by sharing your expertise</p>
-            </div>
-            <div className="feature" onClick={() => handleFeatureClick('location')}>
-              <div className="feature-icon">🗺️</div>
-              <h3>Find Partners</h3>
-              <p>Connect with people going to the same places</p>
-            </div>
+            <ClickSpark
+              sparkColor='#ffaa00'
+              sparkSize={10}
+              sparkRadius={25}
+              sparkCount={8}
+              duration={300}
+            >
+              <div className="feature" onClick={() => handleFeatureClick('mentorship')}>
+                <div className="feature-icon">🎯</div>
+                <h3>Ask Questions</h3>
+                <p>Get help from peers and experts on any topic</p>
+              </div>
+            </ClickSpark>
+            <ClickSpark
+              sparkColor='#00aaff'
+              sparkSize={10}
+              sparkRadius={25}
+              sparkCount={8}
+              duration={300}
+            >
+              <div className="feature" onClick={() => handleFeatureClick('collaboration')}>
+                <div className="feature-icon">🚀</div>
+                <h3>Build Projects</h3>
+                <p>Collaborate on exciting projects with like-minded people</p>
+              </div>
+            </ClickSpark>
+            <ClickSpark
+              sparkColor='#ff00aa'
+              sparkSize={10}
+              sparkRadius={25}
+              sparkCount={8}
+              duration={300}
+            >
+              <div className="feature" onClick={() => handleFeatureClick('resources')}>
+                <div className="feature-icon">📖</div>
+                <h3>Share Knowledge</h3>
+                <p>Contribute to the community by sharing your expertise</p>
+              </div>
+            </ClickSpark>
+            <ClickSpark
+              sparkColor='#00ffff'
+              sparkSize={10}
+              sparkRadius={25}
+              sparkCount={8}
+              duration={300}
+            >
+              <div className="feature" onClick={() => handleFeatureClick('location')}>
+                <div className="feature-icon">🗺️</div>
+                <h3>Find Partners</h3>
+                <p>Connect with people going to the same places</p>
+              </div>
+            </ClickSpark>
           </div>
         </div>
       </div>

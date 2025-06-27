@@ -1,17 +1,29 @@
 import React from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import BlurHeading from "./DashboardHeading.jsx";
+import ClickSpark from "./ClickSpark.jsx";
 import "./Dashboard.css";
 
 const Card = ({ icon, title, description, onClick }) => (
-  <div className="card" onClick={onClick}>
-    <div className="fade-in">
-      <div className="icon">{icon}</div>
-      <h3>{title}</h3>
-      <p>{description}</p>
-      <button className="get-started-btn">Get Started</button>
+  <ClickSpark
+    sparkColor='#00ff88'
+    sparkSize={15}
+    sparkRadius={35}
+    sparkCount={12}
+    duration={400}
+  >
+    <div className="card" onClick={onClick}>
+      <div className="fade-in">
+        <div className="icon">{icon}</div>
+        <h3>{title}</h3>
+        <p>{description}</p>
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 'auto' }}>
+          <button className="get-started-btn">Get Started</button>
+        </div>
+      </div>
     </div>
-  </div>
+  </ClickSpark>
 );
 
 export default function Dashboard({ currentUser, onLogout }) {
@@ -40,14 +52,47 @@ export default function Dashboard({ currentUser, onLogout }) {
           <h1>PeerPath</h1>
         </div>
         <div className="nav-links">
-          <Link to="/dashboard" className="active">Dashboard</Link>
-          <Link to="/doubts">Doubts</Link>
-          <Link to="/collaboration">Collaboration</Link>
-          <Link to="/resources">Resources</Link>
-          <Link to="/chat">Chat</Link>
-          <Link to="/location">Location</Link>
-          <Link to="/profile">Profile</Link>
-          <button onClick={onLogout} className="logout-btn">Logout</button>
+          <motion.div
+            whileHover={{ 
+              scale: 1.05,
+              y: -2,
+              transition: { duration: 0.2 }
+            }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Link to="/dashboard" className="active nav-link-animated">
+              <motion.span
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                Dashboard
+              </motion.span>
+            </Link>
+          </motion.div>
+        </div>
+        <div className="logout-container">
+          <ClickSpark
+            sparkColor='#ff4444'
+            sparkSize={12}
+            sparkRadius={25}
+            sparkCount={8}
+            duration={300}
+          >
+            <motion.button 
+              onClick={onLogout} 
+              className="logout-btn"
+              whileHover={{ 
+                scale: 1.05,
+                y: -2,
+                boxShadow: "0 8px 25px rgba(239, 68, 68, 0.4)",
+                transition: { duration: 0.2 }
+              }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Logout
+            </motion.button>
+          </ClickSpark>
         </div>
       </nav>
 
@@ -77,9 +122,15 @@ export default function Dashboard({ currentUser, onLogout }) {
           />
           <Card
             icon="📚"
-            title="Resources & Chats"
+            title="Resources"
             description="Access past sessions, guides and peer content."
             onClick={handleResources}
+          />
+          <Card
+            icon="📍"
+            title="Campus Connect"
+            description="Find and connect with people nearby."
+            onClick={() => navigate('/location')}
           />
         </div>
       </div>

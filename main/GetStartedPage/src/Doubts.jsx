@@ -1,15 +1,28 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import axios from "axios";
 import Modal from 'react-modal';
+import AnimatedNavLink from './AnimatedNavLink.jsx';
 import "./Doubts.css";
 import { TrendingDoubts } from './TrendingDoubts.jsx';
 import { TopHelpers } from './TopHelpers.jsx';
 import { AskDoubt } from './AskDoubt.jsx';
 
 // DoubtCard styled like Top Helpers
-function DoubtCard({ doubt, onSolve, onCall, onVideoCall, onChat, onLike, likedByCurrentUser, showMarkSolved, onMarkSolved, isAsker, onImageSolution, onImageClick }) {
+function DoubtCard({ doubt, onSolve, onCall, onVideoCall, onChat, onLike, likedByCurrentUser, showMarkSolved, onMarkSolved, isAsker, onImageSolution, onImageClick, onWriteSolution }) {
   const fileInputRef = useRef();
+  const [openSolutionModal, setOpenSolutionModal] = React.useState(false);
+  const [modalType, setModalType] = React.useState('written');
+  const [selectedSolution, setSelectedSolution] = React.useState(null);
+  const writtenSolutions = doubt.solutions.filter(sol => sol.content && !sol.image);
+  const imageSolutions = doubt.solutions.filter(sol => sol.image);
+
+  const handleTabClick = (type) => {
+    setModalType(type);
+    setOpenSolutionModal(true);
+  };
+
   return (
     <div className={`doubt-card${Array.isArray(doubt.solutions) && doubt.solutions.length > 0 ? ' has-solutions' : ''}${doubt.isResolved ? ' resolved' : ''}`}>
       <div className="helper-header">
@@ -27,59 +40,212 @@ function DoubtCard({ doubt, onSolve, onCall, onVideoCall, onChat, onLike, likedB
       <div className="helper-bio">
         <p>{doubt.details}</p>
       </div>
-      {/* Solutions list visible to all */}
+      {/* Solution tab icons open modal */}
       {Array.isArray(doubt.solutions) && doubt.solutions.length > 0 && (
-        <div className="solutions-section">
-          <div className="solutions-header">Solutions ({doubt.solutions.length})</div>
-          {doubt.solutions.map((sol) => (
-            <div
-              key={sol._id}
-              className="solution-item"
-              onClick={() => {
-                console.log('Solution clicked:', sol);
-                console.log('Solution keys:', Object.keys(sol));
-                console.log('Solution image property:', sol.image);
-                console.log('Solution solutionImage property:', sol.solutionImage);
-                
-                // Check for image in different possible properties
-                const hasImage = sol.image || sol.solutionImage || sol.imageUrl;
-                
-                if (hasImage) {
-                  console.log('Image found, opening modal');
-                  onImageClick(sol);
-                } else {
-                  // For text-only solutions, maybe show a different modal or just log
-                  console.log('Text solution clicked:', sol.content);
-                  alert('This is a text-only solution. No image to display.');
-                }
+        <div className="solutions-bar" style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '1.2rem',
+          margin: '1.2rem 0 0.5rem 0',
+          padding: '0.5rem 0',
+          borderTop: '1px solid rgba(139,92,246,0.12)',
+        }}>
+          {writtenSolutions.length > 0 && (
+            <button
+              className="solution-tab-btn"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+                background: 'rgba(139,92,246,0.10)',
+                color: '#dabfff',
+                border: 'none',
+                borderRadius: 8,
+                padding: '0.4rem 1.1rem',
+                fontSize: '1.1rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'background 0.2s, box-shadow 0.2s',
+                boxShadow: '0 1px 4px rgba(139,92,246,0.08)',
               }}
-              title={sol.image ? 'Click to view image' : 'View solution'}
+              onClick={() => handleTabClick('written')}
+              onMouseOver={e => e.currentTarget.style.background = 'rgba(139,92,246,0.18)'}
+              onMouseOut={e => e.currentTarget.style.background = 'rgba(139,92,246,0.10)'}
             >
-              {sol.user?.profilePhoto && (
-                <img 
-                  src={`http://localhost:5000${sol.user.profilePhoto}`} 
-                  alt={sol.user?.username} 
-                  className="solution-avatar"
-                />
-              )}
-              <div className="solution-content">
-                <div className="solution-username">{sol.user?.username || 'Unknown'}</div>
-                {sol.image && (
-                  <img 
-                    src={`http://localhost:5000${sol.image}`} 
-                    alt="solution" 
-                    className="solution-image"
-                  />
-                )}
-                {sol.content && <div className="solution-text">{sol.content}</div>}
+              <span style={{ fontSize: '1.2em', marginRight: 4 }}>📝</span>
+              <span style={{ fontWeight: 700 }}>{writtenSolutions.length}</span>
+            </button>
+          )}
+          {imageSolutions.length > 0 && (
+            <button
+              className="solution-tab-btn"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+                background: 'rgba(16,185,129,0.10)',
+                color: '#6ee7b7',
+                border: 'none',
+                borderRadius: 8,
+                padding: '0.4rem 1.1rem',
+                fontSize: '1.1rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'background 0.2s, box-shadow 0.2s',
+                boxShadow: '0 1px 4px rgba(16,185,129,0.08)',
+              }}
+              onClick={() => handleTabClick('image')}
+              onMouseOver={e => e.currentTarget.style.background = 'rgba(16,185,129,0.18)'}
+              onMouseOut={e => e.currentTarget.style.background = 'rgba(16,185,129,0.10)'}
+            >
+              <span style={{ fontSize: '1.2em', marginRight: 4 }}>🖼️</span>
+              <span style={{ fontWeight: 700 }}>{imageSolutions.length}</span>
+            </button>
+          )}
+        </div>
+      )}
+      {/* Modal for solution list by type */}
+      {openSolutionModal && (
+        <div className="modal-overlay" style={{
+          zIndex: 9999,
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          background: 'rgba(20, 20, 40, 0.7)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }} onClick={() => setOpenSolutionModal(false)}>
+          <div className="modal-content" style={{
+            position: 'relative',
+            width: '100%',
+            maxWidth: 700,
+            maxHeight: '90vh',
+            borderRadius: 16,
+            background: '#fff',
+            color: '#232046',
+            boxShadow: '0 8px 32px rgba(40,40,80,0.18)',
+            overflowY: 'auto',
+            padding: '2.5rem 2rem 2rem 2rem',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+          }} onClick={e => e.stopPropagation()}>
+            <button className="close-btn" style={{ position: 'absolute', top: 18, right: 24, fontSize: 32, background: 'none', border: 'none', color: '#7c3aed', cursor: 'pointer', fontWeight: 700 }} onClick={() => setOpenSolutionModal(false)}>&times;</button>
+            <h2 style={{marginBottom: '1.2rem', color: '#7c3aed', fontSize: '2rem', textAlign: 'center', fontWeight: 700}}>
+              {modalType === 'written' ? 'Written Solutions' : 'Image Solutions'}
+            </h2>
+            {(modalType === 'written' ? writtenSolutions : imageSolutions).length === 0 ? (
+              <div style={{ color: '#a78bfa', textAlign: 'center', margin: '1.5rem 0', fontSize: 20 }}>No solutions yet.</div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', width: '100%' }}>
+                {(modalType === 'written' ? writtenSolutions : imageSolutions).map((sol) => (
+                  <div
+                    key={sol._id}
+                    className="solution-item"
+                    style={{ background: '#f3f0ff', borderRadius: 10, padding: 24, border: '1px solid #e0e7ff', fontSize: 18, wordBreak: 'break-word', boxShadow: 'none' }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 12 }}>
+                      {sol.user?.profilePhoto && (
+                        <img 
+                          src={`http://localhost:5000${sol.user.profilePhoto}`} 
+                          alt={sol.user?.username} 
+                          className="solution-avatar"
+                          style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover', border: '2px solid #c4b5fd' }}
+                        />
+                      )}
+                      <div style={{ fontWeight: 700, color: '#7c3aed', fontSize: '1.2rem' }}>{sol.user?.username || 'Unknown'}</div>
+                    </div>
+                    {sol.image && (
+                      <img 
+                        src={`http://localhost:5000${sol.image}`} 
+                        alt="solution" 
+                        className="solution-image"
+                        style={{ maxWidth: '100%', maxHeight: 320, borderRadius: 10, marginBottom: 12, display: 'block', boxShadow: 'none' }}
+                      />
+                    )}
+                    {sol.content && (
+                      <div style={{ color: '#232046', fontSize: 18, marginBottom: 10, lineHeight: 1.7 }}>{sol.content}</div>
+                    )}
+                    <div style={{ color: '#7c3aed', fontSize: '1rem', textAlign: 'right' }}>
+                      {sol.createdAt ? new Date(sol.createdAt).toLocaleString() : ''}
+                    </div>
+                  </div>
+                ))}
               </div>
+            )}
+          </div>
+        </div>
+      )}
+      {/* Modal for individual solution details */}
+      {selectedSolution && (
+        <div className="modal-overlay" onClick={() => setSelectedSolution(null)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <button className="close-btn" onClick={() => setSelectedSolution(null)}>&times;</button>
+            <h2>Solution by {selectedSolution.user?.username || 'Unknown'}</h2>
+            {selectedSolution.user?.profilePhoto && (
+              <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+                <img 
+                  src={`http://localhost:5000${selectedSolution.user.profilePhoto}`} 
+                  alt={selectedSolution.user?.username} 
+                  style={{ 
+                    width: 60, 
+                    height: 60, 
+                    borderRadius: '50%', 
+                    objectFit: 'cover',
+                    border: '2px solid rgba(139, 92, 246, 0.3)'
+                  }} 
+                />
+              </div>
+            )}
+            {selectedSolution.image && (
+              <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+                <img 
+                  src={`http://localhost:5000${selectedSolution.image}`} 
+                  alt="solution" 
+                  style={{ 
+                    maxWidth: '100%', 
+                    maxHeight: '400px', 
+                    borderRadius: 12, 
+                    border: '2px solid rgba(139, 92, 246, 0.2)'
+                  }} 
+                />
+              </div>
+            )}
+            {selectedSolution.content && (
+              <div style={{ 
+                color: '#a78bfa', 
+                fontSize: '1rem', 
+                lineHeight: '1.6',
+                marginBottom: '1rem',
+                padding: '1rem',
+                background: 'rgba(139, 92, 246, 0.1)',
+                borderRadius: 8,
+                border: '1px solid rgba(139, 92, 246, 0.2)'
+              }}>
+                {selectedSolution.content}
+              </div>
+            )}
+            <div style={{ 
+              color: '#7c3aed', 
+              fontSize: '0.9rem', 
+              textAlign: 'center',
+              padding: '0.5rem',
+              background: 'rgba(124, 58, 237, 0.1)',
+              borderRadius: 6,
+              border: '1px solid rgba(124, 58, 237, 0.2)'
+            }}>
+              Posted on {selectedSolution.createdAt ? new Date(selectedSolution.createdAt).toLocaleString() : 'Unknown date'}
             </div>
-          ))}
+          </div>
         </div>
       )}
       <div className="doubt-actions-carousel action-btn-row">
         <button className="call-btn small-action-btn" onClick={() => onCall(doubt)}>📞</button>
-        {!isAsker && <button className="chat-btn small-action-btn" onClick={() => onChat(doubt)}>💬</button>}
         <button
           className="gallery-btn small-action-btn"
           title="Post Image Solution"
@@ -107,6 +273,9 @@ function DoubtCard({ doubt, onSolve, onCall, onVideoCall, onChat, onLike, likedB
             }
           }}
         />
+        <button className="write-solution-btn" onClick={() => onWriteSolution(doubt)}>
+          ✍️ Write Solution
+        </button>
         {showMarkSolved && !doubt.isResolved && (
           <button className="solve-btn" onClick={() => onMarkSolved(doubt)}>
             ✔️ Mark as Solved
@@ -128,6 +297,9 @@ export default function Doubts({ currentUser, onLogout }){
     const [accepting, setAccepting] = useState(false);
     const [toast, setToast] = useState({ message: '', type: '' });
     const [imageModal, setImageModal] = useState({ open: false, image: '', solver: '', profilePhoto: '' });
+    const [showWriteSolutionModal, setShowWriteSolutionModal] = useState(false);
+    const [writeSolutionText, setWriteSolutionText] = useState('');
+    const [writeSolutionDoubt, setWriteSolutionDoubt] = useState(null);
 
     // Carousel for doubts
     const [carouselIndex, setCarouselIndex] = useState(0);
@@ -318,6 +490,29 @@ export default function Doubts({ currentUser, onLogout }){
       }
     };
 
+    const handleWriteSolution = (doubt) => {
+      setWriteSolutionDoubt(doubt);
+      setWriteSolutionText('');
+      setShowWriteSolutionModal(true);
+    };
+
+    const handleSubmitWriteSolution = async () => {
+      if (!writeSolutionDoubt || !writeSolutionText.trim()) return;
+      try {
+        const token = localStorage.getItem('token');
+        await axios.post(`http://localhost:5000/api/doubts/${writeSolutionDoubt.id}/solutions`, { content: writeSolutionText }, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setShowWriteSolutionModal(false);
+        setWriteSolutionText('');
+        setWriteSolutionDoubt(null);
+        await fetchDoubts();
+        showToast('Solution posted!', 'success');
+      } catch (error) {
+        showToast('Failed to post solution.', 'error');
+      }
+    };
+
     return(
         <div className="doubts-page-container">
             <nav className="collaboration-nav">
@@ -326,14 +521,25 @@ export default function Doubts({ currentUser, onLogout }){
                     <h1>PeerPath</h1>
                 </div>
                 <div className="nav-links">
-                    <Link to="/dashboard">Dashboard</Link>
-                    <Link to="/doubts" className="active">Doubts</Link>
-                    <Link to="/collaboration">Collaboration</Link>
-                    <Link to="/resources">Resources</Link>
-                    <Link to="/chat">Chat</Link>
-                    <Link to="/location">Location</Link>
-                    <Link to="/profile">Profile</Link>
-                    <button onClick={onLogout} className="logout-btn">Logout</button>
+                    <AnimatedNavLink to="/doubts" isActive={true}>Doubts</AnimatedNavLink>
+                    <AnimatedNavLink to="/collaboration">Collaboration</AnimatedNavLink>
+                    <AnimatedNavLink to="/resources">Resources</AnimatedNavLink>
+                    <AnimatedNavLink to="/chat">Chat</AnimatedNavLink>
+                    <AnimatedNavLink to="/location">Campus Connect</AnimatedNavLink>
+                    <AnimatedNavLink to="/profile">Profile</AnimatedNavLink>
+                    <motion.button 
+                      onClick={onLogout} 
+                      className="logout-btn"
+                      whileHover={{ 
+                        scale: 1.05,
+                        y: -2,
+                        boxShadow: "0 8px 25px rgba(239, 68, 68, 0.4)",
+                        transition: { duration: 0.2 }
+                      }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      Logout
+                    </motion.button>
                 </div>
             </nav>
             
@@ -405,7 +611,6 @@ export default function Doubts({ currentUser, onLogout }){
                                     solver: sol.user?.username || 'Unknown', 
                                     profilePhoto: sol.user?.profilePhoto 
                                   });
-                                  alert('Image clicked! Modal should open.'); // Temporary debug
                                   setImageModal({ 
                                     open: true, 
                                     image: sol.image || sol.solutionImage || sol.imageUrl, 
@@ -413,6 +618,7 @@ export default function Doubts({ currentUser, onLogout }){
                                     profilePhoto: sol.user?.profilePhoto 
                                   });
                                 }}
+                                onWriteSolution={handleWriteSolution}
                               />
                             );
                           })}
@@ -565,6 +771,33 @@ export default function Doubts({ currentUser, onLogout }){
               }}>
                 Modal is open! Image: {imageModal.image}
               </div>
+            )}
+
+            {/* Write Solution Modal */}
+            {showWriteSolutionModal && (
+              <Modal
+                isOpen={showWriteSolutionModal}
+                onRequestClose={() => setShowWriteSolutionModal(false)}
+                contentLabel="Write Solution"
+                className="group-modal"
+                overlayClassName="group-modal-overlay"
+                ariaHideApp={false}
+              >
+                <h2>Write Your Solution</h2>
+                <textarea
+                  value={writeSolutionText}
+                  onChange={e => setWriteSolutionText(e.target.value)}
+                  rows={6}
+                  style={{ width: '100%', borderRadius: 8, padding: 12, fontSize: 16, marginBottom: 16 }}
+                  placeholder="Type your solution here..."
+                />
+                <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
+                  <button className="close-modal-btn" onClick={() => setShowWriteSolutionModal(false)}>Cancel</button>
+                  <button className="create-group-btn" onClick={handleSubmitWriteSolution} disabled={!writeSolutionText.trim()}>
+                    Submit Solution
+                  </button>
+                </div>
+              </Modal>
             )}
         </div>
     );

@@ -18,9 +18,8 @@ body {
 /* Collaboration Nav Styles for Dashboard */
 .collaboration-nav {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 1rem 0 1rem 2rem;
   background: rgba(4, 5, 6, 0.9);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(196, 181, 253, 0.2);
@@ -33,6 +32,7 @@ body {
   display: flex;
   align-items: center;
   gap: 1rem;
+  flex-shrink: 0;
 }
 
 .collaboration-nav .nav-logo img {
@@ -51,37 +51,213 @@ body {
   display: flex;
   align-items: center;
   gap: 2rem;
+  flex: 1;
+  justify-content: center;
+  min-width: 0;
+  margin: 0 auto;
+  position: static;
+  left: unset;
+  transform: unset;
+}
+
+.collaboration-nav .logout-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+  margin-left: auto;
+  margin-right: 2rem;
+  position: static;
+  right: unset;
+  top: unset;
+  height: unset;
+  padding-right: 0;
+  transform: none;
 }
 
 .collaboration-nav .nav-links a {
   color: #a78bfa;
   text-decoration: none;
   font-weight: 500;
-  transition: color 0.3s ease;
-  padding: 0.5rem 1rem;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  padding: 0.5rem 0.8rem;
   border-radius: 8px;
+  white-space: nowrap;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.collaboration-nav .nav-links a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(196, 181, 253, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.collaboration-nav .nav-links a:hover::before {
+  left: 100%;
 }
 
 .collaboration-nav .nav-links a:hover,
 .collaboration-nav .nav-links a.active {
   color: #c4b5fd;
   background: rgba(196, 181, 253, 0.1);
+  transform: translateY(-2px) rotate(1deg);
+  box-shadow: 0 4px 15px rgba(196, 181, 253, 0.2);
 }
 
+/* Animated Navigation Links */
+.nav-link-animated {
+  position: relative;
+  display: inline-block;
+  overflow: visible;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.nav-link-animated::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #c4b5fd, #a78bfa);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.nav-link-animated:hover::after {
+  width: 100%;
+}
+
+.nav-link-animated.active::after {
+  width: 100%;
+  background: linear-gradient(90deg, #00ff88, #00cc6a);
+}
+
+.nav-link-animated::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(196, 181, 253, 0.2) 0%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.4s ease;
+}
+
+.nav-link-animated:hover::before {
+  width: 100px;
+  height: 100px;
+}
+
+/* Glowing border effect */
+.nav-link-animated:hover {
+  box-shadow: 
+    0 0 0 1px rgba(196, 181, 253, 0.3),
+    0 0 20px rgba(196, 181, 253, 0.2),
+    inset 0 0 20px rgba(196, 181, 253, 0.1);
+}
+
+.nav-link-animated.active {
+  box-shadow: 
+    0 0 0 1px rgba(0, 255, 136, 0.3),
+    0 0 20px rgba(0, 255, 136, 0.2),
+    inset 0 0 20px rgba(0, 255, 136, 0.1);
+}
+
+.active-indicator {
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  background: #00ff88;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: translateX(-50%) scale(1); opacity: 1; }
+  50% { transform: translateX(-50%) scale(1.2); opacity: 0.7; }
+  100% { transform: translateX(-50%) scale(1); opacity: 1; }
+}
+
+/* Enhanced Logout Button */
 .collaboration-nav .logout-btn {
   background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
   color: white;
   border: none;
   padding: 0.5rem 1rem;
-  border-radius: 8px;
+  border-radius: 0 8px 8px 0;
   cursor: pointer;
   font-weight: 500;
+  font-size: 0.95rem;
   transition: all 0.3s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+  min-width: 80px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.collaboration-nav .logout-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.collaboration-nav .logout-btn:hover::before {
+  left: 100%;
+}
+
+.collaboration-nav .logout-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.4s ease;
+}
+
+.collaboration-nav .logout-btn:hover::after {
+  width: 120px;
+  height: 120px;
 }
 
 .collaboration-nav .logout-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+  transform: translateY(-2px) rotate(-1deg);
+  box-shadow: 
+    0 8px 25px rgba(239, 68, 68, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.2),
+    inset 0 0 20px rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
 }
 
 /* Legacy Dashboard Nav Styles (keeping for compatibility) */
@@ -288,43 +464,56 @@ body {
 
 @media (max-width: 1024px) {
   .card-container {
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 1.5rem;
   }
-  
+
   .card {
-    padding: 1.75rem;
-    min-height: 200px;
+    min-height: 280px;
     max-height: 240px;
   }
-  
+
   .heading {
     font-size: 2.5rem;
   }
-  
+
   .card .icon {
     font-size: 2.5rem;
   }
-  
+
   .card h3 {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
+  }
+
+  .collaboration-nav .nav-links {
+    gap: 1.5rem;
+  }
+
+  .collaboration-nav .nav-links a {
+    padding: 0.4rem 0.7rem;
+    font-size: 0.9rem;
+  }
+
+  .collaboration-nav .logout-btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    min-width: 70px;
   }
 }
 
 @media (max-width: 768px) {
   .dashboard-nav {
-    padding: 1rem;
     flex-direction: column;
-    gap: 1rem;
+    padding: 1rem;
   }
 
   .nav-logo {
-    flex-direction: column;
-    align-items: center;
+    margin-bottom: 1rem;
   }
 
   .nav-logo img {
-    margin-right: 0;
+    width: 40px;
+    height: 40px;
   }
 
   .nav-logo h1 {
@@ -334,28 +523,25 @@ body {
   .dashboard-menu {
     flex-wrap: wrap;
     justify-content: center;
-    gap: 0.5rem;
   }
 
   .dashboard-menu li a {
-    font-size: 0.8rem;
+    font-size: 1rem;
     padding: 0.4rem 0.8rem;
   }
 
   .card-container {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
-    padding: 0 1rem;
+    gap: 1rem;
   }
 
   .card {
-    min-height: 200px;
-    padding: 1.5rem;
+    min-height: 250px;
+    max-height: 220px;
   }
 
   .heading {
     font-size: 2rem;
-    margin-bottom: 2rem;
   }
 
   .dashboard-content {
@@ -364,11 +550,11 @@ body {
   }
 
   .card .icon {
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
 
   .card h3 {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
   }
 
   .card p {
@@ -376,37 +562,106 @@ body {
   }
 
   .get-started-btn {
-    padding: 0.75rem 1.5rem;
+    padding: 0.6rem 1.2rem;
     font-size: 0.9rem;
+  }
+
+  .collaboration-nav {
+    padding: 0.8rem 1rem;
+    flex-direction: column;
+    gap: 1rem;
+    position: relative;
+  }
+
+  .collaboration-nav .nav-links {
+    gap: 1rem;
+    position: static;
+    transform: none;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .collaboration-nav .nav-links a {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  .collaboration-nav .logout-container {
+    position: static;
+    transform: none;
+    justify-content: center;
+    right: auto;
+    top: auto;
+  }
+
+  .collaboration-nav .logout-btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+    min-width: 70px;
   }
 }
 
 @media (max-width: 480px) {
   .dashboard-content {
+    padding: 0.8rem;
     padding-top: 140px;
   }
-  
+
   .heading {
     font-size: 1.8rem;
   }
-  
+
   .card {
-    padding: 1.2rem;
-    min-height: 160px;
+    min-height: 220px;
     max-height: 200px;
+    padding: 1.5rem;
   }
-  
+
   .card .icon {
-    font-size: 2rem;
+    font-size: 1.8rem;
   }
-  
+
   .card h3 {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
-  
+
   .get-started-btn {
-    padding: 0.7rem 1.2rem;
-    font-size: 0.85rem;
-    min-height: 38px;
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
   }
+
+  .collaboration-nav .nav-links {
+    gap: 0.8rem;
+  }
+
+  .collaboration-nav .nav-links a {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .collaboration-nav .logout-btn {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+    min-width: 60px;
+  }
+}
+
+/* Particle Effects */
+.hover-particles {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: linear-gradient(45deg, #c4b5fd, #a78bfa);
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(196, 181, 253, 0.6);
 }

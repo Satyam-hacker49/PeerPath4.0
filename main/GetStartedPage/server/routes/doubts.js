@@ -169,14 +169,15 @@ router.post('/:id/solutions', authenticateToken, upload.single('image'), async (
       user: req.user.userId,
       content: content || ''
     };
-    console.log('req.file:', req.file); // Debug: log uploaded file
     if (req.file) {
       solutionObj.image = `/uploads/${req.file.filename}`;
     }
-    console.log('solutionObj to be pushed:', solutionObj); // Debug: log solution object
 
     doubt.solutions.push(solutionObj);
     await doubt.save();
+
+    // Increment the user's doubtsSolved count
+    await User.findByIdAndUpdate(req.user.userId, { $inc: { doubtsSolved: 1 } });
 
     // Populate the new solution
     await doubt.populate('solutions.user', 'username profilePhoto');

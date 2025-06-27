@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import ClickSpark from './ClickSpark.jsx';
 import './Login.css';
 
 const Login = ({ onLogin }) => {
@@ -79,13 +80,21 @@ const Login = ({ onLogin }) => {
             />
           </div>
           
-          <button 
-            type="submit" 
-            className={`login-btn ${isLoading ? 'loading' : ''}`}
-            disabled={isLoading}
+          <ClickSpark
+            sparkColor='#00ff88'
+            sparkSize={15}
+            sparkRadius={35}
+            sparkCount={12}
+            duration={400}
           >
-            {isLoading ? 'Signing In...' : 'Sign In'}
-          </button>
+            <button 
+              type="submit" 
+              className={`login-btn ${isLoading ? 'loading' : ''}`}
+              disabled={isLoading}
+            >
+              {isLoading ? 'Signing In...' : 'Sign In'}
+            </button>
+          </ClickSpark>
         </form>
         
         <div className="login-footer">

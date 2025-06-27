@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import ClickSpark from './ClickSpark.jsx';
 import './SignUp.css';
 
 const SignUp = ({ onRegister }) => {
@@ -233,9 +234,17 @@ const SignUp = ({ onRegister }) => {
               )}
             </div>
 
-            <button type="submit" className="signup-btn" disabled={loading}>
-              {loading ? 'Creating Account...' : 'Create Account'}
-            </button>
+            <ClickSpark
+              sparkColor='#00ff88'
+              sparkSize={15}
+              sparkRadius={35}
+              sparkCount={12}
+              duration={400}
+            >
+              <button type="submit" className="signup-btn" disabled={loading}>
+                {loading ? 'Creating Account...' : 'Create Account'}
+              </button>
+            </ClickSpark>
           </form>
 
           <div className="signup-footer">

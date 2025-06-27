@@ -255,12 +255,11 @@ const Collaboration = ({ currentUser, onLogout }) => {
           <h1>PeerPath</h1>
         </div>
         <div className="nav-links">
-          <Link to="/dashboard">Dashboard</Link>
           <Link to="/doubts">Doubts</Link>
           <Link to="/collaboration" className="active">Collaboration</Link>
           <Link to="/resources">Resources</Link>
           <Link to="/chat">Chat</Link>
-          <Link to="/location">Location</Link>
+          <Link to="/location">Campus Connect</Link>
           <Link to="/profile">Profile</Link>
           <button onClick={onLogout} className="logout-btn">Logout</button>
         </div>
@@ -308,7 +307,9 @@ const Collaboration = ({ currentUser, onLogout }) => {
                   </div>
                   <div className="project-actions">
                     <button className="manage-btn">Manage Project</button>
-                    <button className="chat-btn">💬</button>
+                    <button className="chat-btn" onClick={() => handleChatWithLeader(project)} title={`Chat with ${project.mentor || (project.creator?.username || 'N/A')}`}>
+                      Chat
+                    </button>
                   </div>
                 </div>
               ))}
@@ -358,7 +359,7 @@ const Collaboration = ({ currentUser, onLogout }) => {
                     </button>
                   )}
                   <button className="chat-btn" onClick={() => handleChatWithLeader(project)} title={`Chat with ${project.mentor || (project.creator?.username || 'N/A')}`}>
-                    💬
+                    Chat
                   </button>
                 </div>
               </div>
@@ -403,7 +404,7 @@ const Collaboration = ({ currentUser, onLogout }) => {
                   <div className="project-actions">
                     {/* No join button for full projects */}
                     <button className="chat-btn" onClick={() => handleChatWithLeader(project)} title={`Chat with ${project.mentor || (project.creator?.username || 'N/A')}`}>
-                      💬
+                      Chat
                     </button>
                   </div>
                 </div>
@@ -464,7 +465,7 @@ const Collaboration = ({ currentUser, onLogout }) => {
                 <div className="project-actions">
                   {/* No join button for full projects */}
                   <button className="chat-btn" onClick={() => handleChatWithLeader(project)} title={`Chat with ${project.mentor || (project.creator?.username || 'N/A')}`}>
-                    💬
+                    Chat
                   </button>
                 </div>
               </div>
